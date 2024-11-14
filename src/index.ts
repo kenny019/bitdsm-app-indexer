@@ -1,11 +1,13 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { AppRunner } from "./services/app-runner.js";
-import { getApps } from './lib/db.js';
+import { getApps } from "./lib/db.js";
 import cron from "node-cron";
 
 const app = new Hono();
 
+app.use("/*", cors());
 
 cron.schedule("* * * * *", async () => {
   try {
