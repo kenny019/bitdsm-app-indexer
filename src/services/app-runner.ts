@@ -3,7 +3,12 @@ import { ethers } from "ethers";
 import AppRegistryABI from "@/src/abis/AppRegistry.json";
 import type { AppRegistry } from "@/types/contracts/AppRegistry.js";
 import type { EventLog } from "ethers";
-import { createApp, getLastSyncBlock, updateApp, updateLatestSyncBlock } from "../lib/db.js";
+import {
+  createApp,
+  getLastSyncBlock,
+  updateApp,
+  updateLatestSyncBlock,
+} from "../lib/db.js";
 
 async function updateAppsRegistry(events: EventLog[]) {
   const newApps = events.map((event) => {
@@ -46,8 +51,7 @@ async function updateAppsMetadata(events: EventLog[]) {
     const jsonUrl = event.args[1];
 
     newMetadata.add({ jsonUrl, address: appAddress });
-  })
-
+  });
 
   for (const metadata of newMetadata) {
     try {
@@ -57,7 +61,7 @@ async function updateAppsMetadata(events: EventLog[]) {
         website?: string;
         description?: string;
         logo?: string;
-    }
+      };
 
       await updateApp({
         name: result.name,
@@ -69,6 +73,13 @@ async function updateAppsMetadata(events: EventLog[]) {
       console.log(`updated ${metadata.address}`);
     } catch (err) {
       console.error(`Error updating ${metadata.address}`, err);
+      await updateApp({
+        name: "Unnamed App",
+        address: metadata.address,
+        description: "",
+        logo: "",
+        url: "",
+      });
     }
   }
 }
