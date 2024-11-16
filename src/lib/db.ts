@@ -71,5 +71,6 @@ export async function updateTVLData(tvl: string) {
 
 export async function getTVL() {
   const tvl = await db.select().from(tvlTable).limit(1);
+
   return tvl[0].tvl;
 }

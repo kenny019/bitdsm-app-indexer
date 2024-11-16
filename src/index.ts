@@ -29,6 +29,7 @@ app.get("/apps-count", async (c) => {
 
 app.get("/tvl", async (c) => {
   const tvl = await getTVL();
+  console.log(tvl);
   return c.text(tvl);
 });
 

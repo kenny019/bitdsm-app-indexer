@@ -90,11 +90,19 @@ async function updateAppsMetadata(events: EventLog[]) {
 
 async function updateTVL(events: EventLog[]) {
   try {
-    const newTVL = events.map((event) => {
-      return event.args[0];
-    });
+    const newTVL =
+      events.length > 0
+        ? events.map((event) => {
+            return event.args[0];
+          })
+        : "0";
+
+    if (!newTVL) {
+      return;
+    }
 
     await updateTVLData(newTVL.toString());
+    console.log(`updated tvl to ${newTVL.toString()}`);
   } catch (err) {
     console.error(err);
   }
@@ -136,6 +144,7 @@ export async function AppRunner() {
 
   const latestBlock = await provider.getBlockNumber();
 
+  console.log(`syncing to block ${latestBlock}`);
   await Promise.all([
     updateAppsRegistry(events),
     updateAppsMetadata(eventsURI),
