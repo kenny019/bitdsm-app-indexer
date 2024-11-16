@@ -2,7 +2,7 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { AppRunner } from "./services/app-runner.js";
-import { getApps, getAppsCount } from "./lib/db.js";
+import { getApps, getAppsCount, getTVL } from "./lib/db.js";
 import cron from "node-cron";
 
 const app = new Hono();
@@ -25,6 +25,11 @@ app.get("/apps", async (c) => {
 app.get("/apps-count", async (c) => {
   const appsCount = await getAppsCount();
   return c.text(appsCount.toString());
+});
+
+app.get("/tvl", async (c) => {
+  const tvl = await getTVL();
+  return c.text(tvl);
 });
 
 const port = 4000;

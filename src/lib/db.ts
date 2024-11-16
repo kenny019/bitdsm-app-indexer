@@ -1,6 +1,6 @@
 import { count, eq } from "drizzle-orm";
 import { db } from "./db/index.js";
-import { appsTable, syncStateTable } from "./db/schema.js";
+import { appsTable, syncStateTable, tvlTable } from "./db/schema.js";
 
 export async function createApp({
   address,
@@ -63,4 +63,13 @@ export async function getLastSyncBlock() {
 export async function getAppsCount() {
   const appsCount = await db.select({ count: count() }).from(appsTable);
   return appsCount[0].count;
+}
+
+export async function updateTVLData(tvl: string) {
+  await db.update(tvlTable).set({ tvl }).where(eq(tvlTable.id, "latest"));
+}
+
+export async function getTVL() {
+  const tvl = await db.select().from(tvlTable).limit(1);
+  return tvl[0].tvl;
 }

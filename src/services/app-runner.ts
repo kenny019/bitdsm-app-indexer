@@ -1,13 +1,16 @@
 import "dotenv/config";
 import { ethers } from "ethers";
 import AppRegistryABI from "@/src/abis/AppRegistry.json";
+import BitcoinPodManagerABI from "@/src/abis/BitcoinPodManager.json";
 import type { AppRegistry } from "@/types/contracts/AppRegistry.js";
+import type { BitcoinPodManager } from "@/types/contracts/BitcoinPodManager.js";
 import type { EventLog } from "ethers";
 import {
   createApp,
   getLastSyncBlock,
   updateApp,
   updateLatestSyncBlock,
+  updateTVLData,
 } from "../lib/db.js";
 
 async function updateAppsRegistry(events: EventLog[]) {
@@ -70,6 +73,7 @@ async function updateAppsMetadata(events: EventLog[]) {
         logo: result.logo,
         url: result.website,
       });
+
       console.log(`updated ${metadata.address}`);
     } catch (err) {
       console.error(`Error updating ${metadata.address}`, err);
@@ -84,6 +88,20 @@ async function updateAppsMetadata(events: EventLog[]) {
   }
 }
 
+async function updateTVL(events: EventLog[]) {
+  try {
+    const newTVL = events.map((event) => {
+      return event.args[0];
+    });
+
+    await updateTVLData(newTVL.toString());
+
+    console.log("updated tvl", newTVL.toString());
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 export async function AppRunner() {
   const RPC_URL = `https://holesky.infura.io/v3/${process.env.INFURA_API_KEY}`;
 
@@ -94,6 +112,12 @@ export async function AppRunner() {
     AppRegistryABI,
     provider
   ) as unknown as AppRegistry;
+
+  const BitcoinPodManager = new ethers.Contract(
+    "0x96EAE70bC21925DdE05602c87c4483579205B1F6",
+    BitcoinPodManagerABI,
+    provider
+  ) as unknown as BitcoinPodManager;
 
   const lastBlock = await getLastSyncBlock();
 
@@ -107,9 +131,17 @@ export async function AppRunner() {
     lastBlock
   )) as unknown as EventLog[];
 
-  await updateAppsRegistry(events);
-  await updateAppsMetadata(eventsURI);
+  const eventsTVL = (await BitcoinPodManager.queryFilter(
+    "TotalTVLUpdated",
+    lastBlock
+  )) as unknown as EventLog[];
 
   const latestBlock = await provider.getBlockNumber();
-  await updateLatestSyncBlock(latestBlock);
+
+  await Promise.all([
+    updateAppsRegistry(events),
+    updateAppsMetadata(eventsURI),
+    updateTVL(eventsTVL),
+    updateLatestSyncBlock(latestBlock),
+  ]);
 }
