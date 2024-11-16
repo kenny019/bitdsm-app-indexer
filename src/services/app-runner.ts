@@ -97,7 +97,7 @@ async function updateTVL(events: EventLog[]) {
           })
         : "0";
 
-    if (!newTVL) {
+    if (events.length < 1) {
       return;
     }
 
