@@ -95,8 +95,6 @@ async function updateTVL(events: EventLog[]) {
     });
 
     await updateTVLData(newTVL.toString());
-
-    console.log("updated tvl", newTVL.toString());
   } catch (err) {
     console.error(err);
   }
