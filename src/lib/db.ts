@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { db } from "./db/index.js";
 import { appsTable, syncStateTable } from "./db/schema.js";
 
@@ -58,4 +58,9 @@ export async function updateLatestSyncBlock(blockNumber: number) {
 export async function getLastSyncBlock() {
   const syncState = await db.select().from(syncStateTable).limit(1);
   return syncState[0].latestBlock;
+}
+
+export async function getAppsCount() {
+  const appsCount = await db.select({ count: count() }).from(appsTable);
+  return appsCount[0].count;
 }
