@@ -13,7 +13,7 @@ export async function createApp({
 }) {
   await db.insert(appsTable).values({
     id: address,
-    block: blockNumber,
+    blockNumber: blockNumber,
     txHash,
   });
 }

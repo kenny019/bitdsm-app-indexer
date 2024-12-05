@@ -5,7 +5,7 @@ export const appsTable = pgTable("apps", {
   name: text(),
   description: text(),
   url: text(),
-  block: integer().notNull(),
+  blockNumber: integer().notNull(),
   txHash: text().notNull(),
   logo: text(),
   tvl: text(),
