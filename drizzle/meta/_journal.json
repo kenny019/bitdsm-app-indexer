@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1731493361175,
-      "tag": "0000_far_random",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1731494663758,
-      "tag": "0001_sloppy_lenny_balinger",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1731497871431,
-      "tag": "0002_rich_northstar",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1731498022002,
-      "tag": "0003_flippant_king_bedlam",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1731775182139,
-      "tag": "0004_perfect_sinister_six",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1733392721022,
-      "tag": "0005_loud_the_phantom",
+      "when": 1733735958808,
+      "tag": "0000_spotty_queen_noir",
       "breakpoints": true
     }
   ]
