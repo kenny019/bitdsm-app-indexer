@@ -109,7 +109,7 @@ async function updateTVL(events: EventLog[]) {
 }
 
 export async function AppRunner() {
-  const RPC_URL = `https://holesky.infura.io/v3/${process.env.INFURA_API_KEY}`;
+  const RPC_URL = `https://yolo-little-fire.ethereum-holesky.quiknode.pro/86056956d0dbb1cc5bddc29d08ac83ad89112415/`;
 
   const provider = new ethers.JsonRpcProvider(RPC_URL);
 
